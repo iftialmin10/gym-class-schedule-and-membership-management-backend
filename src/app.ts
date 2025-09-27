@@ -1,13 +1,34 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import cors from "cors";
+import routes from "./routes";
+import { errorHandler, notFoundHandler } from "./middleware/auth";
+import config from "./config";
 
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World");
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", routes);
+
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    statusCode: 200,
+    message: "Gym Management API is running",
+    data: {
+      timestamp: new Date().toISOString(),
+    },
+  });
 });
 
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-export default app;
+const PORT = config.port;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`API Server: http://localhost:${PORT}/api`);
+});

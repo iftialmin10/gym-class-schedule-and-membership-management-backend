@@ -9,7 +9,11 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "npm run build && node dist/app.js"
+    "start": "npm run build && node dist/app.js",
+    "postinstall": "prisma generate",
+    "seed": "ts-node prisma/seed.ts",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",

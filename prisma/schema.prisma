@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  TRAINER
+  TRAINEE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trainerSchedules ClassSchedule[] @relation("TrainerSchedules")
+  bookings         Booking[]
+
+  @@map("users")
+}
+
+model ClassSchedule {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  startTime   String
+  endTime     String
+  maxTrainees Int      @default(10)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  trainerId String
+  trainer   User      @relation("TrainerSchedules", fields: [trainerId], references: [id])
+  bookings  Booking[]
+
+  @@map("class_schedules")
+}
+
+model Booking {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  traineeId       String
+  trainee         User          @relation(fields: [traineeId], references: [id])
+  classScheduleId String
+  classSchedule   ClassSchedule @relation(fields: [classScheduleId], references: [id])
+
+  @@unique([traineeId, classScheduleId])
+  @@map("bookings")
+}
