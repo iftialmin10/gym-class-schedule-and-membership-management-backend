@@ -19,6 +19,23 @@ A comprehensive Node.js/TypeScript API for managing gym operations with role-bas
 2. **Booking System**: Maximum 10 trainees per class schedule, no double booking
 3. **Role Permissions**: Admins manage trainers and schedules, trainers view assignments, trainees book classes
 
+## Relation Diagram
+
+![Database Schema](prisma-erd.png)
+
+The diagram above shows the relationships between the three main entities in the system:
+
+- **User**: Represents admin, trainer, and trainee roles
+- **ClassSchedule**: Represents gym class schedules with trainer assignments
+- **Booking**: Represents trainee bookings for specific class schedules
+
+### Key Relationships:
+
+- One **User** (trainer) can lead multiple **ClassSchedule** records
+- One **ClassSchedule** can have multiple **Booking** records
+- One **User** (trainee) can make multiple **Booking** records
+- Each **Booking** belongs to exactly one **ClassSchedule** and one **User** (trainee)
+
 ## Technology Stack
 
 - **Backend Framework**: Node.js with Express.js
@@ -333,3 +350,6 @@ src/
 - **JWT errors**: Ensure JWT_SECRET is set in .env file
 
 ### Live Hosting Link
+
+- **Railway-Server-Link**: https://gym-class-schedule-and-membership-management-bac-production.up.railway.app/
+- **Render-Server-Link**: https://gym-class-schedule-and-membership.onrender.com/
