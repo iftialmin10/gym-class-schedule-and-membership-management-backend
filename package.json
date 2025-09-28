@@ -8,7 +8,7 @@
   "main": "dist/app.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && node -e \"require('fs').cpSync('src/generated', 'dist/generated', {recursive: true})\"",
     "start": "node dist/app.js",
     "postinstall": "prisma generate",
     "seed": "ts-node prisma/seed.ts",
